@@ -30,7 +30,9 @@ sp = spotipy.Spotify(
 @client.event
 async def on_ready():
     print("Hello {0.user} !".format(client))
-    await client.change_presence(activity=discord.Game("_scan help"))
+    await client.change_presence(
+        activity=discord.CustomActivity("Sugma ligma stinky boy")
+    )
 
 
 @client.event
