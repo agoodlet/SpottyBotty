@@ -31,7 +31,7 @@ sp = spotipy.Spotify(
 async def on_ready():
     print("Hello {0.user} !".format(client))
     await client.change_presence(
-        activity=discord.CustomActivity("Sugma ligma stinky boy")
+        activity=discord.CustomActivity(os.getenv("DISCORD_BOT_STATUS"))
     )
 
 
