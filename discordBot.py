@@ -1,4 +1,3 @@
-import json
 import os
 
 import discord
@@ -27,7 +26,7 @@ sp = spotipy.Spotify(
     )
 )
 
-playlist = []
+playlist = {}
 
 
 @client.event
