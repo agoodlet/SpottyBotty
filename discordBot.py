@@ -34,9 +34,14 @@ async def on_ready():
     global playlist
 
     print("bot running :^)")
+
+    # set the bot's status
     await client.change_presence(
         activity=discord.CustomActivity(os.getenv("DISCORD_BOT_STATUS"))
     )
+
+    # we want to fetch all the items on the playlist so we can make sure
+    # we only add songs that aren't already in it
     playlist = {
         item["track"]["name"]
         for item in sp.playlist_items(os.getenv("PLAYLIST_ID"))["items"]
@@ -46,11 +51,12 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content.startswith("https://open.spotify.com"):
-        # use spotify API to add to playlist :)
+        # I think I might be able to send the whole URL?
         track_id = message.content.removeprefix(
             "https://open.spotify.com/track/"
         ).split("?")[0]
         track = sp.track(track_id)
+
         if track["name"] not in playlist:
             sp.playlist_add_items(os.getenv("PLAYLIST_ID"), [track_id])
             print(track["name"], "by", track["artists"][0]["name"], "added to playlist")
