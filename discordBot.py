@@ -1,3 +1,4 @@
+import json
 import os
 
 import discord
@@ -26,13 +27,21 @@ sp = spotipy.Spotify(
     )
 )
 
+playlist = []
+
 
 @client.event
 async def on_ready():
-    print("Hello {0.user} !".format(client))
+    global playlist
+
+    print("bot running :^)")
     await client.change_presence(
         activity=discord.CustomActivity(os.getenv("DISCORD_BOT_STATUS"))
     )
+    playlist = {
+        item["track"]["name"]
+        for item in sp.playlist_items(os.getenv("PLAYLIST_ID"))["items"]
+    }
 
 
 @client.event
@@ -43,8 +52,11 @@ async def on_message(message):
             "https://open.spotify.com/track/"
         ).split("?")[0]
         track = sp.track(track_id)
-        sp.playlist_add_items(os.getenv("PLAYLIST_ID"), [track_id])
-        print(track["name"], "by", track["artists"][0]["name"], "added to playlist")
+        if track["name"] not in playlist:
+            sp.playlist_add_items(os.getenv("PLAYLIST_ID"), [track_id])
+            print(track["name"], "by", track["artists"][0]["name"], "added to playlist")
+        else:
+            print(track["name"], " already in playlist")
 
 
 if __name__ == "__main__":
