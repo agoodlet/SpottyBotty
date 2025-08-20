@@ -1,3 +1,5 @@
+just a fricking bot that add linked songs to a playlist everyone can listen to :)
+
 On first run you need to run
 `python discordBot.py`
 
